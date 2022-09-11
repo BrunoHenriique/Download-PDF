@@ -20,16 +20,12 @@ dia = '07'
 mes = 'Setembro'
 ano = '2022'
 
-#                                               MANIPULAÇÃO DO LINK PDF
-a = 0
-while a < 1:
-    a = a + 1
-    b = str(a)
-    num = b.zfill(4)
-    url = f'http://diariooficial.imprensaoficial.com.br/doflash/prototipo/{ano}/{mes}/{dia}/exec1/pdf/pg_{num}.pdf'
-    #webbrowser.open(url)
+#                                               TRATAMENTO DE CADERNO
+
+tipos_caderno= ['cidade','exec1','exec2']
 
 #                                               FUNÇÃO DOWNLOAD DO PDF
+
 def baixar_pdf(url ,endereco):
     resposta = requests.get(url)
     if resposta.status_code == requests.codes.OK:
@@ -38,18 +34,64 @@ def baixar_pdf(url ,endereco):
         print("Download finalizado salvo em: {}".format(endereco))
     else:
         resposta.raise_for_status()
+        
+#                                           Download e alocação dos pdf por caderno em pastas
+print('\nCaderno: Cidade')
+qt_pag_cidade = int(input('Digite a quantidade de paginas : '))
+print('\nCaderno: Executivo 1')
+qt_pag_exec1 = int(input('Digite a quantidade de paginas : '))
+print('\nCaderno: Executivo 2')
+qt_pag_exec2 = int(input('Digite a quantidade de paginas : '))
 
-a = 0
-while a < 2:
-    a = a + 1
-    b = str(a)
-    num = b.zfill(4)
-    baixar_pdf(url, f'pag_{num}')
-#                                               TRATAMENTO DE PDF
-    pdf = open(f'pag_{num}', 'rb')
-    reader = PyPDF2.PdfFileReader(pdf)
-    pagina = reader.getPage(0)
 
-    print(f'-==--=-=-=-=-=-=-=-=-==--=-=-=-PAGINA PAG_{num} -==--=-=-=-=-=-=-=-=-==--=-=-=-')
-    print(pagina.extractText())
+for caderno in tipos_caderno:
+    if caderno == tipos_caderno[0]:
+        print(f'\nEsse é pra ser o caderno "Cidade", Recebo: {caderno}\n')
+
+        a = 0
+        while a < qt_pag_cidade:
+            a = a + 1
+            b = str(a)
+            num = b.zfill(4)
+            url = f'http://diariooficial.imprensaoficial.com.br/doflash/prototipo/{ano}/{mes}/{dia}/{caderno}/pdf/pg_{num}.pdf'
+            # print(url)
+            baixar_pdf(url, f'PDF/PDF_CIDADE/CIDADE_pag_{num}')
+    if caderno == tipos_caderno[1]:
+        print(f'\n Esse é pra ser o caderno "Exec1", Recebo: {caderno}\n')
+
+        a = 0
+        while a < qt_pag_exec1:
+            a = a + 1
+            b = str(a)
+            num = b.zfill(4)
+            url = f'http://diariooficial.imprensaoficial.com.br/doflash/prototipo/{ano}/{mes}/{dia}/{caderno}/pdf/pg_{num}.pdf'
+            # print(url)
+            baixar_pdf(url, f'PDF/PDF_EXEC1/EXEC_1_pag_{num}')
     
+    if caderno == tipos_caderno[-1]:
+        print(f'\n Esse é pra ser o caderno "Exec2", Recebo: {caderno}\n')
+        
+        a = 0
+        while a < qt_pag_exec2:
+            a = a + 1
+            b = str(a)
+            num = b.zfill(4)
+            url = f'http://diariooficial.imprensaoficial.com.br/doflash/prototipo/{ano}/{mes}/{dia}/{caderno}/pdf/pg_{num}.pdf'
+            # print(url)
+            baixar_pdf(url, f'PDF/PDF_EXEC2/EXEC_2_pag_{num}')
+
+#                                               Aqui é possivel conferir o PDF pelo terminal- Descomente e teste
+
+# a = 0
+# while a < qt_pag:
+#     a = a + 1
+#     b = str(a)
+#     num = b.zfill(4)
+# #                                               TRATAMENTO DE PDF
+#     pdf = open(f'PDF/PDF_CIDADE/pag_{num}', 'rb')
+#     reader = PyPDF2.PdfFileReader(pdf)
+#     pagina = reader.getPage(0)
+
+#     print(f'-==--=-=-=-=-=-=-=-=-==--=-=-=-PAGINA PAG_{num} -==--=-=-=-=-=-=-=-=-==--=-=-=-')
+#     print(pagina.extractText())
+
